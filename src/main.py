@@ -1,5 +1,6 @@
-from src.power import power_function
+from src.calculate_rpn import calculate_rpn
 from src.constants import SAMPLE_CONSTANT
+from src.tokenizer import tokenize, to_rpn
 
 
 def main() -> None:
@@ -7,14 +8,11 @@ def main() -> None:
     Обязательнная составляющая программ, которые сдаются. Является точкой входа в приложение
     :return: Данная функция ничего не возвращает
     """
+    try:
+        print(calculate_rpn(to_rpn("4 * (-5 // -2)")))
+    except ValueError as e:
+        print(f"Error: {e}")
 
-    target, degree = map(int, input("Введите два числа разделенные пробелом: ").split(" "))
-
-    result = power_function(target=target, power=degree)
-
-    print(result)
-
-    print(SAMPLE_CONSTANT)
 
 if __name__ == "__main__":
     main()
