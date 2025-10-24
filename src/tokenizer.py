@@ -23,26 +23,41 @@ def is_operator(t: str) -> bool:
 
 def tokenize(exp: str) -> list:
     """разбиение полученного выражения на токены с помощью regex"""
+    valid_symbs = set('0123456789.()*+-/% ')
+    for char in exp:
+        if char not in valid_symbs:
+            raise SyntaxError(f"Недопустимый символ")
     exp = exp.replace(' ', '')
     reg_str = r"\d+\.?\d*|//|\*\*|[()\*\+-/%]"
     output = re.findall(reg_str, exp)
+    if len(output) == 0:
+        raise SyntaxError("Ввод неверного формата")
     return replace_un(output)
 
 
 def replace_un(tokens: list) -> list:
     """выявление унарных + и - в токенизированном выражении и замена их на $ и ~ соответственно"""
-    if is_operator(tokens[0]):
-        if tokens[0] == "-":
-            tokens[0] = "~"
-        elif tokens[0] == "+":
-            tokens[0] = "$"
-    for k in range(1, len(tokens) - 1):
-        if is_operator(tokens[k]) and not (is_num(tokens[k - 1])):
-            if tokens[k] == "-":
-                tokens[k] = "~"
-            elif tokens[k] == "+":
-                tokens[k] = "$"
-    return tokens
+    result = []
+    for i in range(len(tokens)):
+        current = tokens[i]
+        if current in ["+", "-"] and is_operator(current):
+            if i == 0:
+                if current == "+":
+                    result.append("$")
+                else:
+                    result.append("~")
+            else:
+                prev_tk = tokens[i - 1]
+                if is_operator(prev_tk) or prev_tk == "(":
+                    if current == "+":
+                        result.append("$")
+                    else:
+                        result.append("~")
+                else:
+                    result.append(current)
+        else:
+            result.append(current)
+    return result
 
 
 def to_rpn(expression: list) -> list:
@@ -58,27 +73,23 @@ def to_rpn(expression: list) -> list:
                 output.append(int(tk))
         elif is_operator(tk):
             current_priority = op_priority(tk)
-            if prev_priority != 0:
-                if prev_priority <= current_priority and current_priority != 1:
-                    if not(stack[-1] == tk == "**"):
-                        output.append(stack.pop())
-            prev_priority = current_priority
+            while (stack and stack[-1] != "("
+                   and op_priority(stack[-1]) <= current_priority):
+                if tk == "**" and stack[-1] == "**":
+                    break
+                output.append(stack.pop())
             stack.append(tk)
+        elif tk == "(":
+            stack.append(tk)
+        elif tk == ")":
+            while stack and stack[-1] != "(":
+                output.append(stack.pop())
+            if not stack:
+                raise ValueError("Лишние скобки")
+            stack.pop()
         else:
-            if tk == "(":
-                stack.append(tk)
-                prev_priority = 0
-            elif tk == ")":
-                prev_priority = 0
-                while stack and stack[-1] != "(":
-                    output.append(stack.pop())
-                else:
-                    if len(stack) == 0:
-                        raise ValueError("Лишние скобки")
-                    else:
-                        stack.pop()
-            else:
-                raise ValueError("Неверный формат ввода")
+            raise ValueError("Неверный формат ввода")
+
     while stack:
         operator = stack.pop()
         if operator == "(":

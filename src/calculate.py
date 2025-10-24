@@ -27,6 +27,8 @@ def calc(op1: int|float, op2: int|float|None, oper: str) -> int|float:
                 raise TypeError("Операцию нельзя производить над вещественными числами")
             return op2 % op1
         case "**":
+            if op2 < 0 and type(op1) == float:
+                raise TypeError("Операцию нельзя проводить над отрицательными числами")
             return op2 ** op1
         case "~":
             return -op1
