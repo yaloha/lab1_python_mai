@@ -39,15 +39,19 @@ def calc(op1: int|float, op2: int|float|None, oper: str) -> int|float:
 def calculate_rpn(rpn_exp: list) -> int|float:
     """вычисляет выражение, введенное в обратной польской нотации"""
     stack = []
+    op_count = 0
+    num_count = 0
     for tk in rpn_exp:
         if is_operator(tk):
             if tk in ["~", "$"]:
+                op_count += 1
                 if len(stack) == 0:
                     raise SyntaxError("Не хватает чисел на операцию")
                 operand1 = stack.pop()
                 res = calc(operand1, None, tk)
                 stack.append(res)
             else:
+                op_count += 2
                 if len(stack) <= 1:
                     raise SyntaxError("Не хватает чисел на операцию")
                 operand1 = stack.pop()
@@ -56,4 +60,7 @@ def calculate_rpn(rpn_exp: list) -> int|float:
                 stack.append(res)
         else:
             stack.append(tk)
-    return stack[0]
+    if len(stack) == 1:
+        return stack[0]
+    else:
+        raise SyntaxError("Некорректный ввод")

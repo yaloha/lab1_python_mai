@@ -64,7 +64,7 @@ def to_rpn(expression: list) -> list:
     "преобразование токенизированного выражения в обратную польскую нотацию"
     output = []
     stack = []
-    prev_priority = 0
+    prev_tk = ""
     for tk in expression:
         if is_num(tk):
             if '.' in tk:
@@ -80,6 +80,8 @@ def to_rpn(expression: list) -> list:
                 output.append(stack.pop())
             stack.append(tk)
         elif tk == "(":
+            if is_num(prev_tk) or prev_tk == ")":
+                stack.append("*")
             stack.append(tk)
         elif tk == ")":
             while stack and stack[-1] != "(":
@@ -89,6 +91,7 @@ def to_rpn(expression: list) -> list:
             stack.pop()
         else:
             raise ValueError("Неверный формат ввода")
+        prev_tk = tk
     while stack:
         operator = stack.pop()
         if operator == "(":

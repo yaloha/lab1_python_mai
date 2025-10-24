@@ -190,6 +190,13 @@ class FinalCalcTest(unittest.TestCase):
         self.assertEqual(final_calc("5 - (2 * (3 + 4))"), -9)
         self.assertEqual(final_calc("((5 - 1) * (3 + 2))"), 20)
 
+
+    def test_implied_multiplication(self):
+        "опущенный знак умножения"
+        self.assertEqual(final_calc("2(1 + 2)"), 6)
+        self.assertEqual(final_calc("(1 + 2)(3 + 4)"), 21)
+        self.assertEqual(final_calc("-(1 + 2)(1 - 2)"), 3)
+
     def test_space_handling(self):
         "пробелы"
         self.assertEqual(final_calc("  3 + 4  "), 7)
