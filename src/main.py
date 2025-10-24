@@ -1,4 +1,4 @@
-from src.calculate_rpn import calculate_rpn
+from src.calculate import calculate_rpn
 from src.tokenizer import tokenize, to_rpn
 
 def final_calc(expresssion: str) -> int|float:

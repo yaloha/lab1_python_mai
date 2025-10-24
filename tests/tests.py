@@ -2,7 +2,7 @@ import unittest
 
 from src.main import final_calc
 from src.tokenizer import is_num, is_operator, tokenize, to_rpn, replace_un
-from src.calculate_rpn import calculate_rpn
+from src.calculate import calculate_rpn
 
 
 class NumberValTest(unittest.TestCase):
@@ -120,6 +120,7 @@ class RPNCalculationTest(unittest.TestCase):
         self.assertEqual(calculate_rpn([5, 2, "-"]), 3)
         self.assertEqual(calculate_rpn([6, 3, "*"]), 18)
         self.assertEqual(calculate_rpn([8, 2, "/"]), 4)
+        self.assertEqual(calculate_rpn([10, 3, "//"]), 3)
 
     def test_unary_operations(self):
         """унарные операции"""
