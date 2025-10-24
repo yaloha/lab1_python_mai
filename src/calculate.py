@@ -1,4 +1,4 @@
-def calc(op1: int|float, op2: int|float, oper: str) -> int|float:
+def calc(op1: int|float, op2: int|float|None, oper: str) -> int|float:
     match oper:
         case "+":
             return op1 + op2
@@ -24,3 +24,7 @@ def calc(op1: int|float, op2: int|float, oper: str) -> int|float:
             return op2 % op1
         case "**":
             return op2 ** op1
+        case "~":
+            return -op1
+        case "$":
+            return op1
