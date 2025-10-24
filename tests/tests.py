@@ -169,6 +169,10 @@ class FinalCalcTest(unittest.TestCase):
         """одно отрицательное число"""
         self.assertEqual(final_calc("-5"), -5)
 
+    def test_mult_unary_operators(self):
+        """несколько унарных операторов"""
+        self.assertEqual(final_calc("---5"), -5)
+
     def test_pow_expressions(self):
         """приоритет степеней"""
         self.assertEqual(final_calc("2 ** 4 ** 2"), 65536)

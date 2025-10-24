@@ -75,7 +75,7 @@ def to_rpn(expression: list) -> list:
             current_priority = op_priority(tk)
             while (stack and stack[-1] != "("
                    and op_priority(stack[-1]) <= current_priority):
-                if tk == "**" and stack[-1] == "**":
+                if (tk == "**" and stack[-1] == "**") or (tk in ["~", "$"] and stack[-1] in ["~", "$"]):
                     break
                 output.append(stack.pop())
             stack.append(tk)
@@ -89,7 +89,6 @@ def to_rpn(expression: list) -> list:
             stack.pop()
         else:
             raise ValueError("Неверный формат ввода")
-
     while stack:
         operator = stack.pop()
         if operator == "(":
