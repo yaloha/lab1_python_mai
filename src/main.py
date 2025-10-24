@@ -1,17 +1,31 @@
 from src.calculate_rpn import calculate_rpn
-from src.constants import SAMPLE_CONSTANT
-from src.tokenizer import tokenize, to_rpn, replace_un
+from src.tokenizer import tokenize, to_rpn
 
+def final_calc(expresssion: str) -> int|float:
+    """функция, объединяющая остальные фукции и выдающая результат вычислений"""
+    tokens = tokenize(expresssion)
+    rpn = to_rpn(tokens)
+    result = calculate_rpn(rpn)
+    return result
 
 def main() -> None:
     """
     Обязательнная составляющая программ, которые сдаются. Является точкой входа в приложение
     :return: Данная функция ничего не возвращает
     """
-    try:
-        print(calculate_rpn(to_rpn(replace_un(tokenize("-4 * (5 / -2)")))))
-    except ValueError as e:
-        print(f"Error: {e}")
+
+    print("Для выхода введите stop вместо выражения")
+    while True:
+        try:
+            expression = input("Введите выражение: ").strip()
+            if expression == "stop":
+                break
+            if not expression:
+                continue
+            result = final_calc(expression)
+            print(f"Результат: {result}")
+        except Exception as e:
+            print(f"Ошибка: {e}")
 
 
 if __name__ == "__main__":

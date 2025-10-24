@@ -1,12 +1,12 @@
 from src.calculate import calc
-from src.tokenizer import isNum, isOperator
+from src.tokenizer import is_num, is_operator
 
 
-def calculate_rpn(rpn_exp: list()) -> float:
+def calculate_rpn(rpn_exp: list) -> float:
+    """вычисляет выражение, введенное в обратной польской нотации"""
     stack = []
     for tk in rpn_exp:
-        print(stack, rpn_exp)
-        if isOperator(tk):
+        if is_operator(tk):
             if tk in ["~", "$"]:
                 if len(stack) == 0:
                     raise SyntaxError("Не хватает чисел на операцию")

@@ -1,4 +1,8 @@
+from src.tokenizer import tokenize, to_rpn
+
+
 def calc(op1: int|float, op2: int|float|None, oper: str) -> int|float:
+    """выполняет введенную операцию над операндами (или одним операндом)"""
     match oper:
         case "+":
             return op1 + op2
